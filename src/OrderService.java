@@ -44,6 +44,27 @@ public class OrderService {
         }
         return null;
     }
+    // Метод назначения способа доставки и автоматического поиска курьера
+    public void assignDeliveryMethod(int orderId, DeliveryMethod method) {
+        Order order = findOrderById(orderId);
+        if (method.isCourierRequired()) {
+            Courier availableCourier = findAvailableCourier();
+            if (availableCourier == null) {
+                throw new IllegalArgumentException("Нет свободных курьеров для этого типа доставки!");
+            }
+            availableCourier.markBusy();
+            order.setCourier(availableCourier);
+            System.out.println("[СИСТЕМА] Для заказа назначен курьер: " + availableCourier.getName());
+        }
+        double deliveryCost = method.calculateCost(order.getTotalSumma());
+        double finalPrice = order.getTotalSumma() + deliveryCost;
+        order.changeStatus(OrderStatus.accepted);
+
+        System.out.println("Способ доставки успешно применен!");
+        System.out.println("Стоимость самой доставки: " + deliveryCost + " руб.");
+        System.out.println("Итоговая стоимость всего заказа: " + finalPrice + " руб.");
+    }
+
     //отмена заказа
     public void cancelOrder(int orderId) {
         Order order = findOrderById(orderId);

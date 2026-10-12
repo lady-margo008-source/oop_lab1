@@ -26,9 +26,9 @@ import java.util.Scanner;
                             cancelOrderFlow();
                             break;
                         case "4":
-                            System.out.println("Функция в разработке...");
+                            assignDeliveryFlow(); // Вместо "Функция в разработке..."
                             break;
-                        case "7":
+                        case "5":
                             storage.showItems();
                             break;
                         case "0":
@@ -54,7 +54,7 @@ import java.util.Scanner;
             System.out.println("2. Зарегистрировать нового курьера");
             System.out.println("3. Отменить существующий заказ");
             System.out.println("4. Назначить доставку и курьера на заказ");
-            System.out.println("7. Показать остатки товаров на складе");
+            System.out.println("5. Показать остатки товаров на складе");
             System.out.println("0. Выход");
         }
 
@@ -97,5 +97,34 @@ import java.util.Scanner;
             int id = Integer.parseInt(scanner.nextLine().trim());
             orderService.cancelOrder(id);
         }
+        // Подменю для Пункта 4: Выбор типа доставки
+        private void assignDeliveryFlow() {
+            System.out.print("Введите ID заказа для назначения доставки: ");
+            int orderId = Integer.parseInt(scanner.nextLine().trim());
+
+            System.out.println("\nВыберите тип доставки:");
+            System.out.println("1. Самовывоз (0 руб.)");
+            System.out.println("2. Стандартная доставка (300 руб., нужен курьер)");
+            System.out.println("3. Экспресс-доставка (500 руб. + 10% от товаров, нужен курьер)");
+            System.out.print("Ваш выбор: ");
+            String deliveryChoice = scanner.nextLine().trim();
+
+            DeliveryMethod selectedMethod;
+            switch (deliveryChoice) {
+                case "1":
+                    selectedMethod = new PickupDelivery();
+                    break;
+                case "2":
+                    selectedMethod = new StandardDelivery();
+                    break;
+                case "3":
+                    selectedMethod = new ExpressDelivery();
+                    break;
+                default:
+                    throw new IllegalArgumentException("Неверный выбор типа доставки.");
+            }
+            orderService.assignDeliveryMethod(orderId, selectedMethod);
+        }
+
     }
 
