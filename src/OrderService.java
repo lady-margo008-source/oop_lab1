@@ -21,7 +21,7 @@ public class OrderService {
         System.out.println("Курьер"+courier.getName()+"успешно зарегистрирован!");
     }
     //создание заказа
-    public void createOrder(int OrderId,Client client){
+    public void createOrder(int orderId,Client client){
         Order newOrder = new Order(orderId, client);
         this.orders.add(newOrder);
         System.out.println("Заказ №" + orderId + " успешно создан для клиента " + client.getName());
@@ -47,20 +47,23 @@ public class OrderService {
     //отмена заказа
     public void cancelOrder(int orderId) {
         Order order = findOrderById(orderId);
+        order.changeStatus(OrderStatus.created);
+        order.changeStatus(OrderStatus.canceled);
 
-        order.changeStatus(OrderStatus.CANCELED);
-        System.out.println("Возвращаем товары отмененного заказа на склад...");
+        System.out.println("[СКЛАД] Возвращаем товары отмененного заказа на склад...");
         for (OrderItem item : order.getItems()) {
             storage.addItems(item.getName(), item.getQuantity(), item.getPrice());
         }
+
         if (order.getCourier() != null) {
-            System.out.println("Освобождаем курьера " + order.getCourier().getName());
+            System.out.println("[СИСТЕМА] Освобождаем курьера " + order.getCourier().getName());
             order.getCourier().markAvailable();
             order.setCourier(null);
         }
 
-        System.out.println("Заказ №" + orderId + " полностью отменен, ресурсы освобождены.");
+        System.out.println("[УСПЕХ] Заказ №" + orderId + " полностью отменен.");
     }
+
     public List<Order> getOrders() { return new ArrayList<>(orders); }
     public List<Courier> getCouriers() { return new ArrayList<>(couriers); }
 }

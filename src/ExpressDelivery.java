@@ -1,4 +1,4 @@
-public class ExpressDelivery implements DeliveryMetod{
+public class ExpressDelivery implements DeliveryMethod {
     private final double baseCost = 500.0;
     @Override
     public  double calculateCost(double orderSumma){

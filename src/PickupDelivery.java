@@ -1,7 +1,7 @@
-public class PickupDelivery implements DeliveryMetod{
+public class PickupDelivery implements DeliveryMethod {
     @Override
     public double calculateCost(double orderSumma){
-        return 0.0
+        return 0.0;
     }
     @Override
     public boolean isCourierRequired(){

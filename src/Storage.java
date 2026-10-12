@@ -37,5 +37,15 @@ public void takeItems(String name, int quantity) {
         items.put(key, new OrderItem(stockItem.getName(), newQuantity, stockItem.getPrice()));
     }
 }
+    public void showItems() {
+        if (items.isEmpty()) {
+            System.out.println("Склад пуст.");
+            return;
+        }
+        System.out.println("Товары на складе:");
+        for (OrderItem item : items.values()) {
+            System.out.println("- " + item.getName() + ": " + item.getQuantity() + " шт., " + item.getPrice() + " руб.");
+        }
+    }
 
 }
