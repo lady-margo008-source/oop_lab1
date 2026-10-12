@@ -64,7 +64,20 @@ public class OrderService {
         System.out.println("Стоимость самой доставки: " + deliveryCost + " руб.");
         System.out.println("Итоговая стоимость всего заказа: " + finalPrice + " руб.");
     }
+    // Метод добавления товара со склада в конкретный заказ
+    public void addItemToOrder(int orderId, String itemName, int quantity) {
+        Order order = findOrderById(orderId);
+        if (order.getStatus() != OrderStatus.created) {
+            throw new IllegalArgumentException("Можно добавлять товары только в новый заказ со статусом CREATED!");
+        }
+        OrderItem stockItem = storage.getCurrentItem(itemName);
+        storage.takeItems(itemName, quantity);
+        OrderItem orderItem = new OrderItem(stockItem.getName(), quantity, stockItem.getPrice());
+        order.addItem(orderItem);
 
+        System.out.println("[КОРЗИНА] Товар " + stockItem.getName() + " (" + quantity + " шт.) добавлен в заказ №" + orderId);
+        System.out.println("Текущая сумма товаров в заказе: " + order.getTotalSumma() + " руб.");
+    }
     //отмена заказа
     public void cancelOrder(int orderId) {
         Order order = findOrderById(orderId);

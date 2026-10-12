@@ -47,5 +47,14 @@ public void takeItems(String name, int quantity) {
             System.out.println("- " + item.getName() + ": " + item.getQuantity() + " шт., " + item.getPrice() + " руб.");
         }
     }
+    // Метод получения товара по имени для проверки его цены
+    public OrderItem getCurrentItem(String name) {
+        String key = name.trim().toLowerCase();
+        if (!items.containsKey(key)) {
+            throw new IllegalArgumentException("Такого товара нет на складе: " + name);
+        }
+        return items.get(key);
+    }
+
 
 }

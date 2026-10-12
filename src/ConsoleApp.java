@@ -20,15 +20,18 @@ import java.util.Scanner;
                             createClientAndOrder();
                             break;
                         case "2":
+                            addItemToOrderFlow();
+                            break;
+                            case "3":
                             registerCourier();
                             break;
-                        case "3":
+                        case "4":
                             cancelOrderFlow();
                             break;
-                        case "4":
+                        case "5":
                             assignDeliveryFlow(); // Вместо "Функция в разработке..."
                             break;
-                        case "5":
+                        case "6":
                             storage.showItems();
                             break;
                         case "0":
@@ -51,10 +54,11 @@ import java.util.Scanner;
         private void printMenu() {
             System.out.println("\n=== МЕНЮ СЛУЖБЫ ДОСТАВКИ ===");
             System.out.println("1. Создать новый заказ (и клиента)");
-            System.out.println("2. Зарегистрировать нового курьера");
-            System.out.println("3. Отменить существующий заказ");
-            System.out.println("4. Назначить доставку и курьера на заказ");
-            System.out.println("5. Показать остатки товаров на складе");
+            System.out.println("2. Добавить товар в заказ (списание со склада)");
+            System.out.println("3. Зарегистрировать нового курьера");
+            System.out.println("4. Отменить существующий заказ");
+            System.out.println("5. Назначить доставку и курьера на заказ");
+            System.out.println("6. Показать остатки товаров на складе");
             System.out.println("0. Выход");
         }
 
@@ -125,6 +129,19 @@ import java.util.Scanner;
             }
             orderService.assignDeliveryMethod(orderId, selectedMethod);
         }
+        //добавление товара в корзину
+        private void addItemToOrderFlow() {
+            System.out.print("Введите ID заказа: ");
+            int orderId = Integer.parseInt(scanner.nextLine().trim());
+
+            System.out.print("Введите название товара с клавиатуры: ");
+            String itemName = scanner.nextLine();
+
+            System.out.print("Введите количество: ");
+            int quantity = Integer.parseInt(scanner.nextLine().trim());
+            orderService.addItemToOrder(orderId, itemName, quantity);
+        }
+
 
     }
 
